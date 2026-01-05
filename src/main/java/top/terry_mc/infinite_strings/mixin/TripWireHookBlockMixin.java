@@ -40,7 +40,7 @@ public abstract class TripWireHookBlockMixin {
     @Shadow
     private static void emitState(Level level, BlockPos pos, boolean attached, boolean powered, boolean wasAttached, boolean wasPowered) {}
 
-    @Inject(method = "calculateState", at = @At("HEAD"))
+    @Inject(method = "calculateState", at = @At("HEAD"), cancellable = true)
     private static void infinite_strings$calculateStateInject(Level level, BlockPos pos, BlockState hookState, boolean attaching, boolean shouldNotifyNeighbours, int searchRange, BlockState state, CallbackInfo ci) {
         Optional<Direction> optional = hookState.getOptionalValue(FACING);
         if (optional.isPresent()) {
@@ -112,5 +112,6 @@ public abstract class TripWireHookBlockMixin {
                 }
             }
         }
+        ci.cancel();
     }
 }
